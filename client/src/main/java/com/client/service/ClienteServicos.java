@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.client.cliente.cliente;
+import com.client.cliente.Cliente;
 import com.client.cliente_repository.ClienteRepositorio;
 
 @Service
@@ -14,7 +14,7 @@ public class ClienteServicos {
         @Autowired
         private ClienteRepositorio clienteRepositorio;
 
-        public cliente GuardarCliente(cliente cliente){
+        public Cliente GuardarCliente(Cliente cliente){
             return clienteRepositorio.save(cliente);
         }
 
@@ -22,15 +22,19 @@ public class ClienteServicos {
             clienteRepositorio.deleteById(id);
         }
 
-        public List<cliente> ListarClientes(){
+        public List<Cliente> ListarClientes(){
             return clienteRepositorio.findAll();
         }
 
-        public cliente ClienteporNif(String nif){
-            return clienteRepositorio.ClientePorNif(nif);
+        public Cliente ClienteporNif(String nif){
+            if (nif.isEmpty()){
+                throw new RuntimeException("Cliente não encontrado");
+            }else{
+                return clienteRepositorio.ClientePorNif(nif);
+            }
         }
         
-        public List<cliente> ClientePorNome(String nome){
+        public List<Cliente> ClientePorNome(String nome){
             return clienteRepositorio.ClientePorNome(nome);
         }
 }
