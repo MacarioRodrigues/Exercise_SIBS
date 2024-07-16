@@ -1,12 +1,12 @@
-package com.client.service;
+package com.client.client.service;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.client.cliente.Cliente;
-import com.client.cliente_repository.ClienteRepositorio;
+import com.client.client.cliente.Cliente;
+import com.client.client.cliente_repository.ClienteRepositorio;
 
 @Service
 public class ClienteServicos {
@@ -26,15 +26,4 @@ public class ClienteServicos {
             return clienteRepositorio.findAll();
         }
 
-        public Cliente ClienteporNif(String nif){
-            if (nif.isEmpty()){
-                throw new RuntimeException("Cliente não encontrado");
-            }else{
-                return clienteRepositorio.ClientePorNif(nif);
-            }
-        }
-        
-        public List<Cliente> ClientePorNome(String nome){
-            return clienteRepositorio.ClientePorNome(nome);
-        }
 }

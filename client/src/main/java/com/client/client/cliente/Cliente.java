@@ -1,4 +1,4 @@
-package com.client.cliente;
+package com.client.client.cliente;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -17,7 +17,7 @@ public class Cliente {
     private String telefone;
 
     public Cliente(){
-
+        
     }
 
     public Cliente(int id, String nome, String nif, String morada, String telefone){
