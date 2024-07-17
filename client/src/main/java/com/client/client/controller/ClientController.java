@@ -1,6 +1,7 @@
 package com.client.client.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,9 @@ public class ClientController {
     private ClienteServicos clienteServicos;
 
     @PostMapping("/guardar")
-    public Cliente guardar(@RequestBody Cliente cliente){
-        return clienteServicos.GuardarCliente(cliente);
+    public ResponseEntity<Cliente> guardar(@RequestBody Cliente cliente) {
+        Cliente savedCliente = clienteServicos.GuardarCliente(cliente);
+        return ResponseEntity.ok(savedCliente);
     }
 
     @DeleteMapping("/apagar")
@@ -33,10 +35,26 @@ public class ClientController {
         clienteServicos.ApagarCliente(id);
         return ResponseEntity.ok("Cliente deleted successfully");
     }
-
+    
     @GetMapping("/listar")
-    public List<Cliente> listar(){
-        return clienteServicos.ListarClientes();
+    public ResponseEntity<List<Cliente>> listar() {
+        List<Cliente> clientes = clienteServicos.ListarClientes();
+        return ResponseEntity.ok(clientes);
     }
 
+    @GetMapping("/por-nif")
+    public ResponseEntity<Cliente> porNif(@RequestParam String nif) {
+        Optional<Cliente> cliente = clienteServicos.PorNif(nif);
+        if (cliente.isPresent()) {
+            return ResponseEntity.ok(cliente.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/por-nome")
+    public ResponseEntity<List<Cliente>> porNome(@RequestParam String nome) {
+        List<Cliente> clientes = clienteServicos.PorNome(nome);
+        return ResponseEntity.ok(clientes);
+    }
 }
