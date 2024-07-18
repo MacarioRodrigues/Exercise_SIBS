@@ -26,5 +26,20 @@ Para rodar a aplicação localmente:
    ```sh
    git clone https://github.com/MacarioRodrigues/Exercise_SIBS.git
    cd client
-   mvn clean build 
+   mvn clean build / mvnw clean build
    execute o ClientAplication.java como um ficheiro java 
+
+2. Executar os testes:
+   mvn test /mvnw test
+
+## Query executada no pgAdmin4 (PostgreSQL)
+
+CREATE TABLE IF NOT EXISTS public.cliente
+(
+    id integer NOT NULL,
+    nome character varying(20) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
+    nif character varying(9) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
+    morada character varying(50) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
+    telefone character varying(9) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
+    CONSTRAINT cliente_pkey PRIMARY KEY (id)
+)

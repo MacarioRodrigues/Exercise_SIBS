@@ -1,10 +1,14 @@
 package com.client.client.service;
 
+import static java.lang.String.format;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,6 +46,21 @@ public class ClientServicosTests {
         List<Cliente> clientes = service.PorNome(cliente.getNome());
 
         assertEquals(Collections.singletonList(cliente), clientes);
+        verify(repositorio).findAllPorNome(cliente.getNome());
+        verifyNoMoreInteractions(repositorio);
+    }
+
+    @Test
+    void DeveAcionarExceptionPorNome(){
+        when(repositorio.findAllPorNome(cliente.getNome())).thenThrow(new RuntimeException("Erro ao listar clientes pelo nome"));
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            service.PorNome(cliente.getNome());
+        });
+
+        assertThat(exception.getMessage(),is(format("Failed to find client by name:  %s",cliente.getNome())));
+        assertThat(exception.getCause().getClass(),is(RuntimeException.class));
+        assertThat(exception.getCause().getMessage(), is("Erro ao listar clientes pelo nome"));
         verify(repositorio).findAllPorNome(cliente.getNome());
         verifyNoMoreInteractions(repositorio);
     }
@@ -85,6 +104,21 @@ public class ClientServicosTests {
         Optional<Cliente> foundCliente = service.PorNif(cliente.getNif());
 
         assertEquals(Optional.of(cliente), foundCliente);
+        verify(repositorio).findByNif(cliente.getNif());
+        verifyNoMoreInteractions(repositorio);
+    }
+
+    @Test
+    void testPorNifAcionarException() {
+        when(repositorio.findByNif(cliente.getNif())).thenThrow(new RuntimeException("Erro ao encontrar cliente por NIF"));
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            service.PorNif(cliente.getNif());
+        });
+
+        assertThat(exception.getMessage(), is(format("Failed to find client by NIF: %s",cliente.getNif())));
+        assertThat(exception.getCause().getClass(), is(RuntimeException.class));
+        assertThat(exception.getCause().getMessage(), is("Erro ao encontrar cliente por NIF"));
         verify(repositorio).findByNif(cliente.getNif());
         verifyNoMoreInteractions(repositorio);
     }
